@@ -1,6 +1,6 @@
 #include "register_types.h"
 
-#include "test.h"
+#include "player.h"
 
 #include <gdextension_interface.h>
 #include <godot_cpp/core/defs.hpp>
@@ -14,7 +14,7 @@ void initialize_example_module(ModuleInitializationLevel p_level) {
         return;
     }
 
-    ClassDB::register_class<Test>();
+    ClassDB::register_class<Player>();
 }
 
 void uninitialize_example_module(ModuleInitializationLevel p_level) {
