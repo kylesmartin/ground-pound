@@ -59,4 +59,9 @@ func get_next_path(current_path: Node) -> Entry:
 # sets current intersection on blob
 func _on_area_entered(area):
 	var blob: Blob = area.get_parent() as Blob
+	
+	# return if the area is not a blob
+	if blob == null:
+		return
+	
 	blob.set_intersection(self)
