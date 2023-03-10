@@ -1,0 +1,26 @@
+[gd_scene load_steps=6 format=3 uid="uid://besv2fg1tm6gj"]
+
+[ext_resource type="Shader" path="res://scripts/blob.gdshader" id="1_l5mkl"]
+[ext_resource type="Texture2D" uid="uid://byacf7lpb6377" path="res://textures/test/rect.png" id="2_m8cnk"]
+[ext_resource type="Script" path="res://scripts/blob.gd" id="3_i1cel"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_t4pko"]
+shader = ExtResource("1_l5mkl")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_njonw"]
+size = Vector2(8, 8)
+
+[node name="Blob" type="PathFollow2D"]
+loop = false
+script = ExtResource("3_i1cel")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+y_sort_enabled = true
+material = SubResource("ShaderMaterial_t4pko")
+scale = Vector2(0.00380952, 0.00533333)
+texture = ExtResource("2_m8cnk")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_njonw")
