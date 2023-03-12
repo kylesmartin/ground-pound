@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://box2c6ubg0pqe"]
 
 [ext_resource type="Shader" path="res://scripts/bullet.gdshader" id="1_7ogq0"]
-[ext_resource type="Script" path="res://scripts/bullet.gd" id="1_x02aa"]
+[ext_resource type="Script" path="res://scripts/bullet.gd" id="1_bxoya"]
 [ext_resource type="Texture2D" uid="uid://byacf7lpb6377" path="res://textures/test/rect.png" id="2_8naxi"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_46pb1"]
@@ -11,7 +11,7 @@ shader = ExtResource("1_7ogq0")
 size = Vector2(4, 4)
 
 [node name="Bullet" type="Area2D"]
-script = ExtResource("1_x02aa")
+script = ExtResource("1_bxoya")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 material = SubResource("ShaderMaterial_46pb1")
@@ -20,3 +20,5 @@ texture = ExtResource("2_8naxi")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_77bed")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

@@ -1,0 +1,25 @@
+[gd_scene load_steps=6 format=3 uid="uid://b8ooknymbk6di"]
+
+[ext_resource type="Texture2D" uid="uid://byacf7lpb6377" path="res://textures/test/rect.png" id="1_d4j3m"]
+[ext_resource type="Script" path="res://scripts/cylinder.gd" id="1_o0hxa"]
+[ext_resource type="Shader" path="res://scripts/cylinder.gdshader" id="1_vnkbx"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_eya8l"]
+shader = ExtResource("1_vnkbx")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7646p"]
+size = Vector2(26, 25)
+
+[node name="Cylinder" type="StaticBody2D"]
+z_index = 1
+y_sort_enabled = true
+script = ExtResource("1_o0hxa")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_eya8l")
+position = Vector2(0, -2.25001)
+scale = Vector2(0.012381, 0.0196667)
+texture = ExtResource("1_d4j3m")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_7646p")
