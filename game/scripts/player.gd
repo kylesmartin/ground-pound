@@ -2,40 +2,51 @@ class_name Player
 extends CharacterBody2D
 
 # movement speed
-@export var speed: float = 10000
-# seconds between shots
-@export var seconds_between_shots: float = 0.1 
-# bullet scene, instantiated when shot
-@onready var bullet: PackedScene = preload("res://scenes/bullet.tscn")
+@export var speed: float = 200
+# jump speed
+@export var jump_speed: float = 350
+# ground pound speed
+@export var ground_pound_speed: float = 750
+# force of gravity
+@export var gravity: float = 200
+# increases gravity when player is descending
+@export var downwards: float = 1.5
 
-# time since last bullet was shot
-var time_since_last_shot: float = seconds_between_shots
+# is player mid ground pound?
+var is_ground_pounding: bool = false
 
+# notifies other nodes that ground has been pounded
+signal ground_pounded(Vector2)
+
+# TODO: Improve "snappiness" of movement
 func _physics_process(delta: float) -> void:
-	# get input and update velocity
-	var direction: Vector2 = Input.get_vector("move_left", "move_right", "move_up", "move_down")
-	velocity = direction.normalized() * speed * delta
-	move_and_slide()
+	# apply gravity
+	if velocity.y < 0:
+		velocity.y += delta * (gravity * 1.5)
+	else:
+		velocity.y += delta * gravity
 
-func _process(delta: float) -> void:
-	# increment time since last shot
-	time_since_last_shot += delta
+	# update horizontal component based on user input
+	if Input.is_action_pressed("move_left"):
+		velocity.x = -1 * speed
+	elif Input.is_action_pressed("move_right"):
+		velocity.x = speed
+	else:
+		velocity.x = 0
 	
-	# shoot when left mouse button is clicked
-	if Input.is_action_just_pressed("left_click"):
-		shoot()
-
-# instantiate and shoot bullet
-func shoot() -> void:
-	# check if sufficient time passed since last shot
-	if (time_since_last_shot < seconds_between_shots):
-		return
-
-	# instantiate bullet and add to game scene
-	var bullet_instance: Node = bullet.instantiate()
-	get_parent().add_child(bullet_instance)
-	# set bullet position to player position and bullet rotation to look at mouse
-	bullet_instance.position = position
-	bullet_instance.look_at(get_global_mouse_position())
-	# reset time since last shot
-	time_since_last_shot = 0
+	# "move_and_slide" already takes delta time into account.
+	move_and_slide()
+	
+	# start jump
+	if is_on_floor() and Input.is_action_just_pressed("left_click"):
+		velocity.y = -1 * jump_speed
+		
+	# start ground pound
+	if !is_on_floor() and Input.is_action_just_pressed("left_click"):
+		velocity.y = ground_pound_speed
+		is_ground_pounding = true
+		
+	# check if player slammed floor
+	if is_on_floor() and is_ground_pounding:
+		is_ground_pounding = false
+		ground_pounded.emit(position)

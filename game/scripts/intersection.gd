@@ -8,8 +8,10 @@ enum EntryType {ARROW, TAIL}
 @export var paths: Array[NodePath]
 # stores entry type of each intersecting path
 @export var types: Array[EntryType]
-# cylinder that lives at this intersection
-@export var cylinder: Cylinder
+# is platform node enabled for this intersection?
+@export var platform_enabled: bool = true
+
+@onready var platform = $Platform
 
 # represents entry to intersection
 class Entry:
@@ -26,6 +28,11 @@ var rng = RandomNumberGenerator.new()
 var entries: Array[Entry]
 
 func _ready() -> void:
+	# disable platform
+	if !platform_enabled:
+		platform.queue_free()
+		platform = null
+		
 	# paths and types must be of equal sizes to build entry objects
 	if paths.size() != types.size():
 		push_error("Intersection._ready: paths and entry_types must be of equal size")	
@@ -35,18 +42,6 @@ func _ready() -> void:
 		var entry: Entry = Entry.new()
 		entry.init(get_node(paths[i]), types[i])
 		entries.append(entry)
-
-# shut down entries with paths that match those of any given entries
-func shut_down_entries(p_entries: Array[Entry]) -> void:
-	var entries_to_disable: Array[Entry]
-	# check all entries, flagging any that must be disabled
-	for p_entry in p_entries:
-		for entry in entries:
-			if entry.path.name == p_entry.path.name:
-				entries_to_disable.append(entry)
-	# disable flagged entries
-	for entry in entries_to_disable:
-		entries.erase(entry)
 
 # gets entry given path
 func get_entry(path: Node) -> Entry:
@@ -74,10 +69,7 @@ func get_next_path(current_path: Node) -> Entry:
 # sets current intersection on blob
 func _on_area_entered(area):
 	var blob: Blob = area.get_parent() as Blob
-	
-	# return if area is not blob
 	if blob == null:
 		return
-	
-	# set the current intersection of blob
+		
 	blob.set_intersection(self)

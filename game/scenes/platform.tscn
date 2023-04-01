@@ -1,0 +1,36 @@
+[gd_scene load_steps=6 format=3 uid="uid://qwojoutwyk40"]
+
+[ext_resource type="Texture2D" uid="uid://byacf7lpb6377" path="res://textures/test/rect.png" id="1_d4j3m"]
+[ext_resource type="Shader" path="res://scripts/platform.gdshader" id="2_1i5qf"]
+
+[sub_resource type="GDScript" id="GDScript_ivlb1"]
+script/source = "class_name Platform
+extends StaticBody2D
+
+# emitted when cylinder is shot
+signal shot(cylinder_position: Vector2)
+
+func _on_player_ground_pounded(pos):
+	pass # Replace with function body.
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_eya8l"]
+shader = ExtResource("2_1i5qf")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7646p"]
+size = Vector2(60, 15.5)
+
+[node name="Platform" type="StaticBody2D"]
+z_index = 1
+y_sort_enabled = true
+script = SubResource("GDScript_ivlb1")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_eya8l")
+position = Vector2(0, -0.249993)
+scale = Vector2(0.0285714, 0.01)
+texture = ExtResource("1_d4j3m")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -0.25)
+shape = SubResource("RectangleShape2D_7646p")

@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://byacf7lpb6377" path="res://textures/test/rect.png" id="2_i6paa"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2jg1t"]
+size = Vector2(20, 40)
 
 [node name="Player" type="CharacterBody2D"]
 z_index = 1
@@ -16,6 +17,6 @@ scale = Vector2(0.00952381, 0.0266667)
 texture = ExtResource("2_i6paa")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -10)
+position = Vector2(0, -20)
 shape = SubResource("RectangleShape2D_2jg1t")
 debug_color = Color(0, 0.6, 0.701961, 0.419608)

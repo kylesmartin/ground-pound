@@ -1,10 +1,10 @@
-[gd_scene load_steps=22 format=3 uid="uid://bvolqxtsyjo1p"]
+[gd_scene load_steps=22 format=3 uid="uid://cmn5nq40oc706"]
 
 [ext_resource type="Script" path="res://scripts/game.gd" id="1_dmuv8"]
 [ext_resource type="PackedScene" uid="uid://cvp6uy3q0aelf" path="res://scenes/player.tscn" id="1_sho4r"]
 [ext_resource type="PackedScene" uid="uid://bnkpp5w631wmr" path="res://scenes/intersection.tscn" id="3_7c3f3"]
 [ext_resource type="PackedScene" uid="uid://besv2fg1tm6gj" path="res://scenes/blob.tscn" id="3_wd236"]
-[ext_resource type="PackedScene" uid="uid://b8ooknymbk6di" path="res://scenes/cylinder.tscn" id="4_6x1v6"]
+[ext_resource type="PackedScene" uid="uid://qwojoutwyk40" path="res://scenes/platform.tscn" id="4_6x1v6"]
 
 [sub_resource type="Curve2D" id="Curve2D_hrsmw"]
 _data = {
@@ -102,17 +102,17 @@ _data = {
 }
 point_count = 2
 
-[node name="Game" type="Node2D" node_paths=PackedStringArray("blob")]
+[node name="Game" type="Node2D"]
 y_sort_enabled = true
 script = ExtResource("1_dmuv8")
-blob = NodePath("Path5/Blob")
-intersection_paths = Array[NodePath]([NodePath("Intersection"), NodePath("Intersection2"), NodePath("Intersection3"), NodePath("Intersection4"), NodePath("Intersection5"), NodePath("Intersection6"), NodePath("Intersection7"), NodePath("Intersection8"), NodePath("Intersection9")])
 
 [node name="Camera2D" type="Camera2D" parent="."]
 
 [node name="Player" parent="." instance=ExtResource("1_sho4r")]
-position = Vector2(-72, -56)
-seconds_between_shots = 0.25
+position = Vector2(0, -8)
+jump_speed = 750.0
+gravity = 1000.0
+downwards = 4.0
 
 [node name="Path1" type="Path2D" parent="."]
 curve = SubResource("Curve2D_hrsmw")
@@ -129,9 +129,10 @@ curve = SubResource("Curve2D_sqily")
 [node name="Path5" type="Path2D" parent="."]
 curve = SubResource("Curve2D_kdwo2")
 
-[node name="Blob" parent="Path5" instance=ExtResource("3_wd236")]
+[node name="Blob" parent="Path5" node_paths=PackedStringArray("player") instance=ExtResource("3_wd236")]
 position = Vector2(0, -128)
 rotation = 2.35619
+player = NodePath("../../Player")
 threshold = 100.0
 speed_multiplier = 1.1
 
@@ -171,72 +172,67 @@ curve = SubResource("Curve2D_15ul7")
 [node name="Path16" type="Path2D" parent="."]
 curve = SubResource("Curve2D_b4jve")
 
-[node name="Intersection" parent="." node_paths=PackedStringArray("cylinder") instance=ExtResource("3_7c3f3")]
+[node name="Intersection" parent="." instance=ExtResource("3_7c3f3")]
 position = Vector2(-128, -128)
 paths = Array[NodePath]([NodePath("../Path9"), NodePath("../Path10")])
 types = Array[int]([0, 1])
-cylinder = NodePath("../Cylinder")
 
 [node name="Intersection2" parent="." instance=ExtResource("3_7c3f3")]
 position = Vector2(0, -128)
 paths = Array[NodePath]([NodePath("../Path11"), NodePath("../Path8"), NodePath("../Path1"), NodePath("../Path5"), NodePath("../Path9")])
 types = Array[int]([1, 0, 1, 1, 1])
+platform_enabled = false
 
-[node name="Intersection3" parent="." node_paths=PackedStringArray("cylinder") instance=ExtResource("3_7c3f3")]
+[node name="Intersection3" parent="." instance=ExtResource("3_7c3f3")]
 position = Vector2(128, -128)
 paths = Array[NodePath]([NodePath("../Path11"), NodePath("../Path12")])
 types = Array[int]([0, 0])
-cylinder = NodePath("../Cylinder2")
 
 [node name="Intersection4" parent="." instance=ExtResource("3_7c3f3")]
 position = Vector2(-128, 0)
 paths = Array[NodePath]([NodePath("../Path10"), NodePath("../Path5"), NodePath("../Path2"), NodePath("../Path6"), NodePath("../Path16")])
 types = Array[int]([0, 0, 0, 0, 0])
+platform_enabled = false
 
-[node name="Intersection5" parent="." node_paths=PackedStringArray("cylinder") instance=ExtResource("3_7c3f3")]
+[node name="Intersection5" parent="." instance=ExtResource("3_7c3f3")]
 paths = Array[NodePath]([NodePath("../Path1"), NodePath("../Path3"), NodePath("../Path4"), NodePath("../Path2")])
 types = Array[int]([0, 0, 0, 1])
-cylinder = NodePath("../Cylinder3")
 
 [node name="Intersection6" parent="." instance=ExtResource("3_7c3f3")]
 position = Vector2(128, 0)
 paths = Array[NodePath]([NodePath("../Path12"), NodePath("../Path8"), NodePath("../Path3"), NodePath("../Path7"), NodePath("../Path13")])
 types = Array[int]([1, 1, 1, 0, 0])
+platform_enabled = false
 
-[node name="Intersection7" parent="." node_paths=PackedStringArray("cylinder") instance=ExtResource("3_7c3f3")]
+[node name="Intersection7" parent="." instance=ExtResource("3_7c3f3")]
 position = Vector2(-128, 128)
 paths = Array[NodePath]([NodePath("../Path16"), NodePath("../Path15")])
 types = Array[int]([1, 0])
-cylinder = NodePath("../Cylinder4")
 
 [node name="Intersection8" parent="." instance=ExtResource("3_7c3f3")]
 position = Vector2(0, 128)
 paths = Array[NodePath]([NodePath("../Path15"), NodePath("../Path6"), NodePath("../Path4"), NodePath("../Path7"), NodePath("../Path14")])
 types = Array[int]([1, 1, 1, 1, 0])
+platform_enabled = false
 
-[node name="Intersection9" parent="." node_paths=PackedStringArray("cylinder") instance=ExtResource("3_7c3f3")]
+[node name="Intersection9" parent="." instance=ExtResource("3_7c3f3")]
 position = Vector2(128, 128)
 paths = Array[NodePath]([NodePath("../Path14"), NodePath("../Path13")])
 types = Array[int]([1, 1])
-cylinder = NodePath("../Cylinder5")
 
-[node name="Cylinder" parent="." instance=ExtResource("4_6x1v6")]
+[node name="Platform" parent="." instance=ExtResource("4_6x1v6")]
 position = Vector2(-128, -128)
 
-[node name="Cylinder2" parent="." instance=ExtResource("4_6x1v6")]
+[node name="Platform2" parent="." instance=ExtResource("4_6x1v6")]
 position = Vector2(128, -128)
 
-[node name="Cylinder3" parent="." instance=ExtResource("4_6x1v6")]
+[node name="Platform3" parent="." instance=ExtResource("4_6x1v6")]
 
-[node name="Cylinder4" parent="." instance=ExtResource("4_6x1v6")]
+[node name="Platform4" parent="." instance=ExtResource("4_6x1v6")]
 position = Vector2(-128, 128)
 
-[node name="Cylinder5" parent="." instance=ExtResource("4_6x1v6")]
+[node name="Platform5" parent="." instance=ExtResource("4_6x1v6")]
 position = Vector2(128, 128)
 
-[connection signal="hit_cylinder" from="Path5/Blob" to="." method="_on_blob_hit_cylinder"]
-[connection signal="shot" from="Cylinder" to="Path5/Blob" method="_on_cylinder_shot"]
-[connection signal="shot" from="Cylinder2" to="Path5/Blob" method="_on_cylinder_shot"]
-[connection signal="shot" from="Cylinder3" to="Path5/Blob" method="_on_cylinder_shot"]
-[connection signal="shot" from="Cylinder4" to="Path5/Blob" method="_on_cylinder_shot"]
-[connection signal="shot" from="Cylinder5" to="Path5/Blob" method="_on_cylinder_shot"]
+[connection signal="ground_pounded" from="Player" to="Platform" method="_on_player_ground_pounded"]
+[connection signal="deflected" from="Path5/Blob" to="." method="_on_blob_deflected"]
