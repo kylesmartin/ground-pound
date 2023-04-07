@@ -1,2 +1,2 @@
-# blaster-volley
-A game about maintaining a volley using a blaster
+# ground-pound
+A game about ground-pounding to maintain a volley
