@@ -13,8 +13,6 @@ var current_state_name: String
 signal transitioned(state_name)
 
 func _ready() -> void:
-	# wait for the owner to be ready before running
-	await owner.ready
 	# the state machine assigns itself to the state objects' state_machine property
 	for child in get_children():
 		child.state_machine = self

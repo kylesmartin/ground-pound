@@ -1,0 +1,69 @@
+[gd_scene load_steps=10 format=3 uid="uid://dk1h02fsymn4j"]
+
+[ext_resource type="Texture2D" uid="uid://ny3v8t0pufhe" path="res://textures/art/dust.png" id="1_45pcc"]
+[ext_resource type="Script" path="res://scripts/dust.gd" id="1_x37on"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eep8x"]
+atlas = ExtResource("1_45pcc")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ei73h"]
+atlas = ExtResource("1_45pcc")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_luchl"]
+atlas = ExtResource("1_45pcc")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tnf3s"]
+atlas = ExtResource("1_45pcc")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kd1cu"]
+atlas = ExtResource("1_45pcc")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ablt8"]
+atlas = ExtResource("1_45pcc")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_fevxi"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eep8x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ei73h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_luchl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tnf3s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kd1cu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ablt8")
+}],
+"loop": false,
+"name": &"poof",
+"speed": 20.0
+}]
+
+[node name="Dust" type="Node2D"]
+z_index = 5
+position = Vector2(0, -16)
+script = ExtResource("1_x37on")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+z_index = 5
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_fevxi")
+animation = &"poof"
+frame = 5
+frame_progress = 1.0
+
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

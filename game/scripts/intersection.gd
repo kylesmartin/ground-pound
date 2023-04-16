@@ -87,7 +87,7 @@ func _on_area_exited(area) -> void:
 # slows down blob and notifies blob of the hitbox
 func _on_hitbox_area_entered(area) -> void:
 	var blob: Blob = area.get_parent() as Blob
-	if blob == null:
+	if blob == null or !platform_enabled:
 		return
 	
 	blob.in_hitbox = true
@@ -97,7 +97,7 @@ func _on_hitbox_area_entered(area) -> void:
 # lowers the hitbox flag
 func _on_hitbox_area_exited(area) -> void:
 	var blob: Blob = area.get_parent() as Blob
-	if blob == null:
+	if blob == null or !platform_enabled:
 		return
 	
 	blob.in_hitbox = false
