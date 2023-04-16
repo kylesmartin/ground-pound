@@ -1,104 +1,105 @@
-[gd_scene load_steps=22 format=3 uid="uid://cmn5nq40oc706"]
+[gd_scene load_steps=23 format=3 uid="uid://cmn5nq40oc706"]
 
 [ext_resource type="Script" path="res://scripts/game.gd" id="1_dmuv8"]
 [ext_resource type="PackedScene" uid="uid://cvp6uy3q0aelf" path="res://scenes/player.tscn" id="1_sho4r"]
 [ext_resource type="PackedScene" uid="uid://bnkpp5w631wmr" path="res://scenes/intersection.tscn" id="3_7c3f3"]
 [ext_resource type="PackedScene" uid="uid://besv2fg1tm6gj" path="res://scenes/blob.tscn" id="3_wd236"]
-[ext_resource type="PackedScene" uid="uid://qwojoutwyk40" path="res://scenes/platform.tscn" id="4_6x1v6"]
+[ext_resource type="Texture2D" uid="uid://dpqh3k8kj13jm" path="res://textures/art/wall.png" id="6_nvh7l"]
+[ext_resource type="Texture2D" uid="uid://dx7qvia62l2ek" path="res://textures/art/bg.png" id="7_gee8g"]
 
 [sub_resource type="Curve2D" id="Curve2D_hrsmw"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 0, -128, 0, 0, 0, 0, 0, 0)
+"points": PackedVector2Array(0, 0, 0, 0, 0, -60, 0, 0, 0, 0, 0, 3)
 }
 point_count = 2
 
 [sub_resource type="Curve2D" id="Curve2D_b17so"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -128, 0)
+"points": PackedVector2Array(0, 0, 0, 0, 0, 3, 0, 0, 0, 0, -63, 3)
 }
 point_count = 2
 
 [sub_resource type="Curve2D" id="Curve2D_dso7j"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 128, 0, 0, 0, 0, 0, 0, 0)
+"points": PackedVector2Array(0, 0, 0, 0, 63, 3, 0, 0, 0, 0, 0, 3)
 }
 point_count = 2
 
 [sub_resource type="Curve2D" id="Curve2D_sqily"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 0, 128, 0, 0, 0, 0, 0, 0)
+"points": PackedVector2Array(0, 0, 0, 0, 0, 66, 0, 0, 0, 0, 0, 3)
 }
 point_count = 2
 
 [sub_resource type="Curve2D" id="Curve2D_kdwo2"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 0, -128, 0, 0, 0, 0, -128, 0)
+"points": PackedVector2Array(0, 0, 0, 0, 0, -60, 0, 0, 0, 0, -63, 3)
 }
 point_count = 2
 
 [sub_resource type="Curve2D" id="Curve2D_qdb0f"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 0, 128, 0, 0, 0, 0, -128, 0)
+"points": PackedVector2Array(0, 0, 0, 0, 0, 66, 0, 0, 0, 0, -63, 3)
 }
 point_count = 2
 
 [sub_resource type="Curve2D" id="Curve2D_oou4y"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 0, 128, 0, 0, 0, 0, 128, 1)
+"points": PackedVector2Array(0, 0, 0, 0, 0, 66, 0, 0, 0, 0, 63, 3)
 }
 point_count = 2
 
 [sub_resource type="Curve2D" id="Curve2D_8lduw"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 128, 0, 0, 0, 0, 0, 0, -128)
+"points": PackedVector2Array(0, 0, 0, 0, 63, 3, 0, 0, 0, 0, 0, -60)
 }
 point_count = 2
 
 [sub_resource type="Curve2D" id="Curve2D_bvkt4"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 64, 64, 0, 0, 0, 0, -64, 64)
+"points": PackedVector2Array(0, 0, 0, 0, 64, 132, 0, 0, 0, 0, 1, 132)
 }
 point_count = 2
 
 [sub_resource type="Curve2D" id="Curve2D_1nn3f"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, -64, 64, 0, 0, 0, 0, -64, 192)
+"points": PackedVector2Array(0, 0, 0, 0, 1, 132, 0, 0, 0, 0, 1, 195)
 }
 point_count = 2
 
 [sub_resource type="Curve2D" id="Curve2D_uuble"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 64, 64, 0, 0, 0, 0, 192, 64)
+"points": PackedVector2Array(0, 0, 0, 0, 64, 132, 0, 0, 0, 0, 127, 132)
 }
 point_count = 2
 
 [sub_resource type="Curve2D" id="Curve2D_t13a1"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 128, 0, 0, 0, 0, 0, 128, -128)
+"points": PackedVector2Array(0, 0, 0, 0, 63, 3, 0, 0, 0, 0, 63, -60)
 }
 point_count = 2
 
 [sub_resource type="Curve2D" id="Curve2D_noqvm"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 128, 128, 0, 0, 0, 0, 128, 0)
+"points": PackedVector2Array(0, 0, 0, 0, 63, 66, 0, 0, 0, 0, 63, 3)
 }
 point_count = 2
 
 [sub_resource type="Curve2D" id="Curve2D_lc5kh"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 128, 128, 0, 0, 0, 0, 0, 128)
+"points": PackedVector2Array(0, 0, 0, 0, 63, 66, 0, 0, 0, 0, 0, 66)
 }
 point_count = 2
 
 [sub_resource type="Curve2D" id="Curve2D_15ul7"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 0, 128, 0, 0, 0, 0, -128, 128)
+"points": PackedVector2Array(0, 0, 0, 0, 0, 66, 0, 0, 0, 0, -63, 66)
 }
 point_count = 2
 
 [sub_resource type="Curve2D" id="Curve2D_b4jve"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, -128, 128, 0, 0, 0, 0, -128, 0)
+"points": PackedVector2Array(0, 0, 0, 0, -63, 66, 0, 0, 0, 0, -63, 3)
 }
 point_count = 2
 
@@ -107,12 +108,15 @@ y_sort_enabled = true
 script = ExtResource("1_dmuv8")
 
 [node name="Camera2D" type="Camera2D" parent="."]
+z_index = 10
+zoom = Vector2(3, 3)
 
 [node name="Player" parent="." instance=ExtResource("1_sho4r")]
-position = Vector2(0, -8)
-jump_speed = 750.0
-gravity = 1000.0
-downwards = 4.0
+position = Vector2(0, -25)
+jump_speed = 500.0
+ground_pound_speed = 500.0
+gravity_force = 20.0
+downwards = 1.5
 
 [node name="Path1" type="Path2D" parent="."]
 curve = SubResource("Curve2D_hrsmw")
@@ -130,11 +134,10 @@ curve = SubResource("Curve2D_sqily")
 curve = SubResource("Curve2D_kdwo2")
 
 [node name="Blob" parent="Path5" node_paths=PackedStringArray("player") instance=ExtResource("3_wd236")]
-position = Vector2(0, -128)
+position = Vector2(0, -60)
 rotation = 2.35619
 player = NodePath("../../Player")
-threshold = 100.0
-speed_multiplier = 1.1
+start_speed = 25.0
 
 [node name="Path6" type="Path2D" parent="."]
 curve = SubResource("Curve2D_qdb0f")
@@ -173,66 +176,61 @@ curve = SubResource("Curve2D_15ul7")
 curve = SubResource("Curve2D_b4jve")
 
 [node name="Intersection" parent="." instance=ExtResource("3_7c3f3")]
-position = Vector2(-128, -128)
+position = Vector2(-63, -60)
 paths = Array[NodePath]([NodePath("../Path9"), NodePath("../Path10")])
 types = Array[int]([0, 1])
 
 [node name="Intersection2" parent="." instance=ExtResource("3_7c3f3")]
-position = Vector2(0, -128)
+position = Vector2(0, -60)
 paths = Array[NodePath]([NodePath("../Path11"), NodePath("../Path8"), NodePath("../Path1"), NodePath("../Path5"), NodePath("../Path9")])
 types = Array[int]([1, 0, 1, 1, 1])
 platform_enabled = false
 
 [node name="Intersection3" parent="." instance=ExtResource("3_7c3f3")]
-position = Vector2(128, -128)
+position = Vector2(63, -60)
 paths = Array[NodePath]([NodePath("../Path11"), NodePath("../Path12")])
 types = Array[int]([0, 0])
 
 [node name="Intersection4" parent="." instance=ExtResource("3_7c3f3")]
-position = Vector2(-128, 0)
+position = Vector2(-63, 3)
 paths = Array[NodePath]([NodePath("../Path10"), NodePath("../Path5"), NodePath("../Path2"), NodePath("../Path6"), NodePath("../Path16")])
 types = Array[int]([0, 0, 0, 0, 0])
 platform_enabled = false
 
 [node name="Intersection5" parent="." instance=ExtResource("3_7c3f3")]
+position = Vector2(0, 3)
 paths = Array[NodePath]([NodePath("../Path1"), NodePath("../Path3"), NodePath("../Path4"), NodePath("../Path2")])
 types = Array[int]([0, 0, 0, 1])
 
 [node name="Intersection6" parent="." instance=ExtResource("3_7c3f3")]
-position = Vector2(128, 0)
+position = Vector2(63, 3)
 paths = Array[NodePath]([NodePath("../Path12"), NodePath("../Path8"), NodePath("../Path3"), NodePath("../Path7"), NodePath("../Path13")])
 types = Array[int]([1, 1, 1, 0, 0])
 platform_enabled = false
 
 [node name="Intersection7" parent="." instance=ExtResource("3_7c3f3")]
-position = Vector2(-128, 128)
+position = Vector2(-63, 66)
 paths = Array[NodePath]([NodePath("../Path16"), NodePath("../Path15")])
 types = Array[int]([1, 0])
 
 [node name="Intersection8" parent="." instance=ExtResource("3_7c3f3")]
-position = Vector2(0, 128)
+position = Vector2(0, 66)
 paths = Array[NodePath]([NodePath("../Path15"), NodePath("../Path6"), NodePath("../Path4"), NodePath("../Path7"), NodePath("../Path14")])
 types = Array[int]([1, 1, 1, 1, 0])
 platform_enabled = false
 
 [node name="Intersection9" parent="." instance=ExtResource("3_7c3f3")]
-position = Vector2(128, 128)
+position = Vector2(63, 66)
 paths = Array[NodePath]([NodePath("../Path14"), NodePath("../Path13")])
 types = Array[int]([1, 1])
 
-[node name="Platform" parent="." instance=ExtResource("4_6x1v6")]
-position = Vector2(-128, -128)
+[node name="Wall" type="Sprite2D" parent="."]
+z_index = 2
+texture_filter = 1
+texture = ExtResource("6_nvh7l")
 
-[node name="Platform2" parent="." instance=ExtResource("4_6x1v6")]
-position = Vector2(128, -128)
+[node name="Bg" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("7_gee8g")
 
-[node name="Platform3" parent="." instance=ExtResource("4_6x1v6")]
-
-[node name="Platform4" parent="." instance=ExtResource("4_6x1v6")]
-position = Vector2(-128, 128)
-
-[node name="Platform5" parent="." instance=ExtResource("4_6x1v6")]
-position = Vector2(128, 128)
-
-[connection signal="ground_pounded" from="Player" to="Platform" method="_on_player_ground_pounded"]
 [connection signal="deflected" from="Path5/Blob" to="." method="_on_blob_deflected"]

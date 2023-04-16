@@ -1,22 +1,129 @@
-[gd_scene load_steps=4 format=3 uid="uid://cvp6uy3q0aelf"]
+[gd_scene load_steps=16 format=3 uid="uid://cvp6uy3q0aelf"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_jb757"]
-[ext_resource type="Texture2D" uid="uid://byacf7lpb6377" path="res://textures/test/rect.png" id="2_i6paa"]
+[ext_resource type="Texture2D" uid="uid://b7r64fjanf4yh" path="res://textures/art/player.png" id="2_fo6q7"]
+[ext_resource type="Script" path="res://scripts/walk.gd" id="3_evhsi"]
+[ext_resource type="Script" path="res://scripts/state_machine.gd" id="3_ldk6s"]
+[ext_resource type="Script" path="res://scripts/idle.gd" id="4_mwgud"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_2jg1t"]
-size = Vector2(20, 40)
+[sub_resource type="AtlasTexture" id="AtlasTexture_2ehvx"]
+atlas = ExtResource("2_fo6q7")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wsffi"]
+atlas = ExtResource("2_fo6q7")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_28lnl"]
+atlas = ExtResource("2_fo6q7")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d51kj"]
+atlas = ExtResource("2_fo6q7")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ournt"]
+atlas = ExtResource("2_fo6q7")
+region = Rect2(224, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kssp5"]
+atlas = ExtResource("2_fo6q7")
+region = Rect2(192, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_abdkk"]
+atlas = ExtResource("2_fo6q7")
+region = Rect2(288, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jbbte"]
+atlas = ExtResource("2_fo6q7")
+region = Rect2(256, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_lx4oj"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2ehvx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2ehvx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2ehvx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2ehvx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wsffi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_28lnl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_28lnl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_28lnl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_28lnl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d51kj")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ournt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kssp5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_abdkk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jbbte")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 10.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_40lli"]
+size = Vector2(12, 27)
 
 [node name="Player" type="CharacterBody2D"]
-z_index = 1
+z_index = 4
 y_sort_enabled = true
 script = ExtResource("1_jb757")
+speed = 100.0
+jump_speed = 50.0
+ground_pound_speed = 50.0
+downwards = 4.0
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(0, -20)
-scale = Vector2(0.00952381, 0.0266667)
-texture = ExtResource("2_i6paa")
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+z_index = 3
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_lx4oj")
+animation = &"walk"
+frame_progress = 0.91658
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -20)
-shape = SubResource("RectangleShape2D_2jg1t")
-debug_color = Color(0, 0.6, 0.701961, 0.419608)
+position = Vector2(0, 2.5)
+shape = SubResource("RectangleShape2D_40lli")
+
+[node name="StateMachine" type="Node2D" parent="." node_paths=PackedStringArray("state")]
+script = ExtResource("3_ldk6s")
+state = NodePath("Idle")
+
+[node name="Walk" type="Node2D" parent="StateMachine" node_paths=PackedStringArray("animated_sprite")]
+script = ExtResource("3_evhsi")
+animated_sprite = NodePath("../../AnimatedSprite2D")
+
+[node name="Idle" type="Node2D" parent="StateMachine" node_paths=PackedStringArray("animated_sprite")]
+script = ExtResource("4_mwgud")
+animated_sprite = NodePath("../../AnimatedSprite2D")

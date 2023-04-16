@@ -1,50 +1,48 @@
 class_name Blob
 extends PathFollow2D
 
-# player
+# reference to the player node
 @export var player: Player
-# starting movement speed
-@export var start_speed: float = 100
-# proximity to platform that enables deflection
-@export var threshold: float = 10
+# initial speed of the blob
+@export var start_speed: float = 10
 # post-deflection speed multiplier
 @export var speed_multiplier: float = 1.5
 
-# movement direction along current path
+# movement direction along the current path
 var direction: int = 1
-# current intersection that blob has reached
+# current intersection that the blob is occupying
 var current_intersection: Intersection
 # tracks the current speed of the blob
 var current_speed: float = start_speed
+# is the current blob in a platform hitbox?
+var in_hitbox: bool = false
 
 # emitted when blob gets deflected
 signal deflected()
 
 func _ready() -> void:
-	# connect to player's ground pound signal
+	# initialize the current blob speed
+	current_speed = start_speed
+	# connect to the player's ground pound signal
 	if player == null:
 		push_error("Blob._ready: no player found")
 	else:
 		player.ground_pounded.connect(_on_player_ground_pounded.bind())
 
 func _physics_process(delta: float) -> void:
-	# move along path
+	# move along the current path
 	progress += direction * current_speed * delta
 	
-	# change path if reached end of current one
+	# change path if the end of the current path has been reached
 	if ((progress_ratio == 1 and direction == 1) or (progress_ratio == 0 and direction == -1)):
-		# reset speed if platform is hit
-		if (current_intersection.platform != null):
-			current_speed = start_speed
-		
-		# get next entry
+		# get the next entry
 		var next_entry: Intersection.Entry = current_intersection.get_next_path(get_parent())
 
-		# switch parent of blob
+		# switch parent
 		get_parent().remove_child(self)
 		next_entry.path.add_child(self)
 		
-		# set progress based on type
+		# set progress ratio based on type
 		if (next_entry.type == Intersection.EntryType.ARROW):
 			progress_ratio = 1
 			direction = -1
@@ -56,15 +54,19 @@ func _physics_process(delta: float) -> void:
 func set_intersection(new_intersection: Intersection) -> void:
 	current_intersection = new_intersection
 
-# deflect blob
-func _on_player_ground_pounded(player_position: Vector2) -> void:
-	# return if current intersection is not within threshold
-	if (player_position - position).length() > threshold:
+# resets the current speed to the start speed
+func reset_speed() -> void:
+	current_speed = start_speed
+
+# deflects the blob
+func _on_player_ground_pounded(intersection: Intersection) -> void:
+	# return if the current intersection is null, has no platform, or is occupying a hitbox
+	if current_intersection == null or current_intersection != intersection or !current_intersection.platform_enabled or in_hitbox:
 		return
 	
-	# check if blob is in edge quadrant and facing nearby intersection
-	if (progress_ratio > 0.75 and direction == 1) or (progress_ratio < 0.25 and direction == -1):
-		# change direction and increment speed
+	# verify that blob is approaching the center of the current intersection before deflecting
+	if (progress_ratio > 0.5 and direction == 1) or (progress_ratio < 0.5 and direction == -1):
+		# flip direction and increment speed
 		direction = direction * -1
 		current_speed *= speed_multiplier
 		# emit deflected signal
