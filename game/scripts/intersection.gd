@@ -21,7 +21,9 @@ class Entry:
 		type = p_type
 
 # the platform node corresponding to this intersection
-@onready var platform = $Platform
+@onready var platform: Platform = $Platform
+# the outline surrounding the intersection
+@onready var outline: Outline = $Outline
 # generates random numbers
 var rng = RandomNumberGenerator.new()
 # stores all entries to intersection
@@ -29,8 +31,10 @@ var entries: Array[Entry]
 
 func _ready() -> void:
 	if !platform_enabled:
-		# disable platform
+		# disable platform and outline
 		platform.queue_free()
+		outline.queue_free()
+		platform = null
 		platform = null
 		
 	# paths and types must be of equal sizes to build entry objects
@@ -66,14 +70,15 @@ func get_next_path(current_path: Node) -> Entry:
 	var rand_int: int = rng.randi_range(0, len(avail_entries)-1)
 	return avail_entries[rand_int]
 
-
-
 # sets the current intersection on the blob
 func _on_area_entered(area) -> void:
 	var blob: Blob = area.get_parent() as Blob
 	if blob == null:
 		return
-		
+	
+	if outline != null && !blob.just_switched:
+		outline.shine()
+	
 	blob.set_intersection(self)
 
 # unsets the current intersection on the blob
@@ -81,31 +86,5 @@ func _on_area_exited(area) -> void:
 	var blob: Blob = area.get_parent() as Blob
 	if blob == null:
 		return
-		
+	
 	blob.set_intersection(null)
-
-# slows down blob and notifies blob of the hitbox
-func _on_hitbox_area_entered(area) -> void:
-	var blob: Blob = area.get_parent() as Blob
-	if blob == null or !platform_enabled:
-		return
-	
-	blob.in_hitbox = true
-	blob.reset_speed()
-
-
-# lowers the hitbox flag
-func _on_hitbox_area_exited(area) -> void:
-	var blob: Blob = area.get_parent() as Blob
-	if blob == null or !platform_enabled:
-		return
-	
-	blob.in_hitbox = false
-
-# set intersection on player
-func _on_body_entered(body) -> void:
-	var player: Player = body as Player
-	if player == null or !platform_enabled:
-		return
-	
-	player.set_intersection(self)

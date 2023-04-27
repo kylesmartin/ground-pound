@@ -1,11 +1,21 @@
-[gd_scene load_steps=23 format=3 uid="uid://cmn5nq40oc706"]
+[gd_scene load_steps=35 format=3 uid="uid://cmn5nq40oc706"]
 
 [ext_resource type="Script" path="res://scripts/game.gd" id="1_dmuv8"]
-[ext_resource type="PackedScene" uid="uid://cvp6uy3q0aelf" path="res://scenes/player.tscn" id="1_sho4r"]
+[ext_resource type="PackedScene" uid="uid://bp7tbpgn20df0" path="res://scenes/player.tscn" id="1_sho4r"]
+[ext_resource type="Script" path="res://scripts/camera.gd" id="2_jcfgs"]
+[ext_resource type="Texture2D" uid="uid://c3bhhpbtysoqy" path="res://textures/art/game_over.png" id="3_0xdyx"]
 [ext_resource type="PackedScene" uid="uid://bnkpp5w631wmr" path="res://scenes/intersection.tscn" id="3_7c3f3"]
 [ext_resource type="PackedScene" uid="uid://besv2fg1tm6gj" path="res://scenes/blob.tscn" id="3_wd236"]
+[ext_resource type="Texture2D" uid="uid://da2xkqfa2mff1" path="res://textures/art/replay_btn_on.png" id="4_sp33p"]
+[ext_resource type="Texture2D" uid="uid://byf4qevo7tdo1" path="res://textures/art/home_btn_on.png" id="4_ujfx4"]
+[ext_resource type="Texture2D" uid="uid://dbq7xwoyxxe61" path="res://textures/art/replay_btn_off.png" id="5_1ubon"]
+[ext_resource type="Texture2D" uid="uid://b8t54xtbt6cd2" path="res://textures/art/home_btn_off.png" id="5_3161w"]
+[ext_resource type="Texture2D" uid="uid://qgs6r6ambqkf" path="res://textures/art/home_btn_hover.png" id="6_0je31"]
+[ext_resource type="Texture2D" uid="uid://jxnbih5bnkco" path="res://textures/art/replay_btn_hover.png" id="6_2iklw"]
 [ext_resource type="Texture2D" uid="uid://dpqh3k8kj13jm" path="res://textures/art/wall.png" id="6_nvh7l"]
 [ext_resource type="Texture2D" uid="uid://dx7qvia62l2ek" path="res://textures/art/bg.png" id="7_gee8g"]
+[ext_resource type="Script" path="res://scripts/bounds.gd" id="8_n80su"]
+[ext_resource type="FontFile" uid="uid://c648yka13404k" path="res://fonts/Anton-Regular.ttf" id="9_akok4"]
 
 [sub_resource type="Curve2D" id="Curve2D_hrsmw"]
 _data = {
@@ -103,16 +113,135 @@ _data = {
 }
 point_count = 2
 
-[node name="Game" type="Node2D"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iy328"]
+size = Vector2(340, 318)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vtork"]
+size = Vector2(20, 318)
+
+[node name="Game" type="Node2D" node_paths=PackedStringArray("points_label", "time_label", "game_timer", "game_over_panel", "final_score", "best_rally")]
 y_sort_enabled = true
 script = ExtResource("1_dmuv8")
+points_label = NodePath("CanvasLayer/MainContainer/ScoreContainer/Label")
+time_label = NodePath("CanvasLayer/MainContainer/TimerContainer/Label")
+game_timer = NodePath("GameTimer")
+game_over_panel = NodePath("CanvasLayer/MainContainer/GameOverContainer")
+final_score = NodePath("CanvasLayer/MainContainer/GameOverContainer/MarginContainer/VBoxContainer/Points")
+best_rally = NodePath("CanvasLayer/MainContainer/GameOverContainer/MarginContainer/VBoxContainer/TopSpeed")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="MainContainer" type="MarginContainer" parent="CanvasLayer"]
+z_index = 20
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="TimerContainer" type="MarginContainer" parent="CanvasLayer/MainContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 50
+
+[node name="Label" type="Label" parent="CanvasLayer/MainContainer/TimerContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("9_akok4")
+theme_override_font_sizes/font_size = 75
+text = "2:00"
+
+[node name="ScoreContainer" type="MarginContainer" parent="CanvasLayer/MainContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 50
+
+[node name="Label" type="Label" parent="CanvasLayer/MainContainer/ScoreContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("9_akok4")
+theme_override_font_sizes/font_size = 75
+text = "20
+"
+
+[node name="GameOverContainer" type="MarginContainer" parent="CanvasLayer/MainContainer"]
+process_mode = 2
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/MainContainer/GameOverContainer"]
+texture_filter = 1
+layout_mode = 2
+texture = ExtResource("3_0xdyx")
+stretch_mode = 5
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/MainContainer/GameOverContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainContainer/GameOverContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="GameOver" type="Label" parent="CanvasLayer/MainContainer/GameOverContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("9_akok4")
+theme_override_font_sizes/font_size = 75
+text = "Game Over"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Points" type="Label" parent="CanvasLayer/MainContainer/GameOverContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("9_akok4")
+theme_override_font_sizes/font_size = 25
+text = "Points: 50"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TopSpeed" type="Label" parent="CanvasLayer/MainContainer/GameOverContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("9_akok4")
+theme_override_font_sizes/font_size = 25
+text = "Top Speed: 100"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/MainContainer/GameOverContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Replay" type="TextureButton" parent="CanvasLayer/MainContainer/GameOverContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+texture_normal = ExtResource("4_sp33p")
+texture_pressed = ExtResource("5_1ubon")
+texture_hover = ExtResource("6_2iklw")
+
+[node name="ToMenu" type="TextureButton" parent="CanvasLayer/MainContainer/GameOverContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+texture_normal = ExtResource("4_ujfx4")
+texture_pressed = ExtResource("5_3161w")
+texture_hover = ExtResource("6_0je31")
+
+[node name="GameTimer" type="Timer" parent="."]
+wait_time = 120.0
+one_shot = true
 
 [node name="Camera2D" type="Camera2D" parent="."]
 z_index = 10
 zoom = Vector2(3, 3)
+script = ExtResource("2_jcfgs")
+noise_shake_speed = 100.0
+noise_shake_strength = 30.0
+noise_frequency = 2.0
 
 [node name="Player" parent="." instance=ExtResource("1_sho4r")]
-position = Vector2(0, -25)
+position = Vector2(0, -100)
 jump_speed = 450.0
 ground_pound_speed = 450.0
 gravity_force = 20.0
@@ -233,4 +362,35 @@ texture = ExtResource("6_nvh7l")
 texture_filter = 1
 texture = ExtResource("7_gee8g")
 
+[node name="Bounds" type="Node2D" parent="."]
+script = ExtResource("8_n80su")
+
+[node name="Zone" type="Area2D" parent="Bounds"]
+z_index = 10
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bounds/Zone"]
+shape = SubResource("RectangleShape2D_iy328")
+
+[node name="RightWall" type="StaticBody2D" parent="Bounds"]
+z_index = 10
+position = Vector2(180, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bounds/RightWall"]
+shape = SubResource("RectangleShape2D_vtork")
+debug_color = Color(0.843137, 0.345098, 0.431373, 0.419608)
+
+[node name="RightWall2" type="StaticBody2D" parent="Bounds"]
+z_index = 10
+position = Vector2(-180, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bounds/RightWall2"]
+shape = SubResource("RectangleShape2D_vtork")
+debug_color = Color(0.843137, 0.345098, 0.431373, 0.419608)
+
+[connection signal="pressed" from="CanvasLayer/MainContainer/GameOverContainer/MarginContainer/VBoxContainer/HBoxContainer/Replay" to="." method="_on_replay_pressed"]
+[connection signal="pressed" from="CanvasLayer/MainContainer/GameOverContainer/MarginContainer/VBoxContainer/HBoxContainer/ToMenu" to="." method="_on_to_menu_pressed"]
+[connection signal="timeout" from="GameTimer" to="." method="_on_game_timer_timeout"]
+[connection signal="ground_pounded" from="Player" to="Camera2D" method="_on_player_ground_pounded"]
 [connection signal="deflected" from="Path5/Blob" to="." method="_on_blob_deflected"]
+[connection signal="hit" from="Path5/Blob" to="." method="_on_blob_hit"]
+[connection signal="body_exited" from="Bounds/Zone" to="Bounds" method="_on_zone_body_exited"]

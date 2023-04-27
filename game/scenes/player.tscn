@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://cvp6uy3q0aelf"]
+[gd_scene load_steps=28 format=3 uid="uid://bp7tbpgn20df0"]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_jb757"]
 [ext_resource type="Texture2D" uid="uid://b7r64fjanf4yh" path="res://textures/art/player.png" id="2_fo6q7"]
@@ -8,6 +8,10 @@
 [ext_resource type="Script" path="res://scripts/jump.gd" id="6_mt7t0"]
 [ext_resource type="Script" path="res://scripts/land.gd" id="7_led45"]
 [ext_resource type="Script" path="res://scripts/airborne.gd" id="8_tl4t0"]
+[ext_resource type="AudioStream" uid="uid://c1pokx50aji0q" path="res://sounds/jump.wav" id="9_se5j1"]
+[ext_resource type="AudioStream" uid="uid://bgx757cj1duup" path="res://sounds/trigger_pound.wav" id="10_m2l1g"]
+[ext_resource type="AudioStream" uid="uid://dkvgqejrwk1jv" path="res://sounds/pound.wav" id="11_eg282"]
+[ext_resource type="AudioStream" uid="uid://brd2a1ietpwau" path="res://sounds/land.wav" id="12_510es"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5m5sq"]
 atlas = ExtResource("2_fo6q7")
@@ -33,9 +37,17 @@ region = Rect2(96, 0, 32, 64)
 atlas = ExtResource("2_fo6q7")
 region = Rect2(160, 0, 32, 64)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_s7eoq"]
+atlas = ExtResource("2_fo6q7")
+region = Rect2(352, 0, 32, 64)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_tj6ta"]
 atlas = ExtResource("2_fo6q7")
 region = Rect2(128, 0, 32, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u12bq"]
+atlas = ExtResource("2_fo6q7")
+region = Rect2(384, 0, 32, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_47ir3"]
 atlas = ExtResource("2_fo6q7")
@@ -101,18 +113,24 @@ animations = [{
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_lc4oa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s7eoq")
 }],
 "loop": false,
 "name": &"jump",
-"speed": 20.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_tj6ta")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u12bq")
 }],
 "loop": false,
 "name": &"land",
-"speed": 20.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -143,6 +161,7 @@ speed = 100.0
 jump_speed = 50.0
 ground_pound_speed = 50.0
 downwards = 4.0
+terminal_velocity = 1000.0
 state_machine = NodePath("StateMachine")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
@@ -151,6 +170,8 @@ texture_filter = 1
 position = Vector2(0, -32)
 sprite_frames = SubResource("SpriteFrames_lx4oj")
 animation = &"land"
+frame = 1
+frame_progress = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -15)
@@ -179,3 +200,17 @@ animated_sprite = NodePath("../../AnimatedSprite2D")
 [node name="Airborne" type="Node2D" parent="StateMachine" node_paths=PackedStringArray("animated_sprite")]
 script = ExtResource("8_tl4t0")
 animated_sprite = NodePath("../../AnimatedSprite2D")
+
+[node name="JumpSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("9_se5j1")
+
+[node name="TriggerPoundSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("10_m2l1g")
+
+[node name="PoundSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("11_eg282")
+volume_db = -10.0
+
+[node name="LandSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("12_510es")
+volume_db = -10.0

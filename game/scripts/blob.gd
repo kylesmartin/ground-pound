@@ -14,11 +14,13 @@ var direction: int = 1
 var current_intersection: Intersection
 # tracks the current speed of the blob
 var current_speed: float = start_speed
-# is the current blob in a platform hitbox?
-var in_hitbox: bool = false
+# did the blob just switch paths?
+var just_switched: bool = false
 
 # emitted when blob gets deflected
 signal deflected()
+# emitted when blob hits a platform
+signal hit()
 
 func _ready() -> void:
 	# initialize the current blob speed
@@ -32,13 +34,21 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	# move along the current path
 	progress += direction * current_speed * delta
-	
+
 	# change path if the end of the current path has been reached
 	if ((progress_ratio == 1 and direction == 1) or (progress_ratio == 0 and direction == -1)):
+		# if platform enabled, divide speed by multiplier and turn on platform light
+		if current_intersection.platform_enabled:
+			hit.emit()
+			current_speed = max(current_speed / speed_multiplier, start_speed)
+			current_intersection.platform.shine()
+			current_intersection.outline.off()
+		
 		# get the next entry
 		var next_entry: Intersection.Entry = current_intersection.get_next_path(get_parent())
-
-		# switch parent
+		
+		# set new parent
+		raise_just_switched()
 		get_parent().remove_child(self)
 		next_entry.path.add_child(self)
 		
@@ -50,18 +60,20 @@ func _physics_process(delta: float) -> void:
 			progress_ratio = 0
 			direction = 1
 
+# used to help other components know if the blob just switched paths
+func raise_just_switched() -> void:
+	just_switched = true
+	await get_tree().create_timer(0.1).timeout
+	just_switched = false
+
 # sets current intersection of blob
 func set_intersection(new_intersection: Intersection) -> void:
 	current_intersection = new_intersection
 
-# resets the current speed to the start speed
-func reset_speed() -> void:
-	current_speed = start_speed
-
 # deflects the blob
 func _on_player_ground_pounded(intersection: Intersection) -> void:
-	# return if the current intersection is null, has no platform, or is occupying a hitbox
-	if current_intersection == null or current_intersection != intersection or !current_intersection.platform_enabled or in_hitbox:
+	# return if the current intersection is null, is not the intersection that got pounded, or has no platform
+	if current_intersection == null or current_intersection != intersection or !current_intersection.platform_enabled:
 		return
 	
 	# verify that blob is approaching the center of the current intersection before deflecting
@@ -71,3 +83,4 @@ func _on_player_ground_pounded(intersection: Intersection) -> void:
 		current_speed *= speed_multiplier
 		# emit deflected signal
 		deflected.emit()
+		current_intersection.outline.off()

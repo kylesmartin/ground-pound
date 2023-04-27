@@ -11,6 +11,8 @@ extends CharacterBody2D
 @export var gravity_force: float = 200
 # increases gravity when player is descending
 @export var downwards: float = 1.5
+# max velocity
+@export var terminal_velocity: float = 500
 # this player's state machine
 @export var state_machine: StateMachine
 
@@ -20,15 +22,37 @@ var dust_scene: PackedScene = preload("res://scenes/dust.tscn")
 var is_ground_pounding: bool = false
 # was the player on the floor in the previous frame?
 var prev_on_floor: bool = false
-# current intersection that the player is occupying
-var current_intersection: Intersection = null
+# all possible intersections
+var intersections: Array[Intersection]
+
+# the player will never be this far from a platform
+const unreachable_distance = 1000000
 
 # notifies other nodes that the ground has been pounded
 signal ground_pounded(Intersection)
 
-# sets current intersection of player
-func set_intersection(new_intersection: Intersection) -> void:
-	current_intersection = new_intersection
+func _ready() -> void:
+	# store intersections with platforms
+	for child in get_parent().get_children():
+		# only children to Game of class Area2D are Intersections
+		# TODO: this is not ideal if other Area2Ds are added as direct children
+		if child.is_class("Area2D") and (child as Intersection).platform_enabled:
+			intersections.push_back(child)
+
+# get the nearest intersection to the player
+func get_nearest_intersection() -> Intersection:
+	var nearest_intersection: Intersection = null
+	var nearest_distance: float = unreachable_distance
+	
+	for intersection in intersections:
+		# compare to the running nearest distance
+		# update the nearest intersection if needed
+		var distance = (intersection.position - position).length()
+		if distance < nearest_distance:
+			nearest_distance = distance
+			nearest_intersection = intersection
+	
+	return nearest_intersection
 
 # spawns a dust scene
 func spawn_dust() -> void:
@@ -44,11 +68,16 @@ func _physics_process(delta: float) -> void:
 	else:
 		velocity.y += gravity_force
 	
+	# velocity can only become so large
+	velocity.y = min(terminal_velocity, velocity.y)
+	
 	# update horizontal component based on user input
 	if Input.is_action_pressed("move_left"):
 		velocity.x = -1 * speed
+		$AnimatedSprite2D.flip_h = true
 	elif Input.is_action_pressed("move_right"):
 		velocity.x = speed
+		$AnimatedSprite2D.flip_h = false
 	else:
 		velocity.x = 0
 	
@@ -61,6 +90,7 @@ func _physics_process(delta: float) -> void:
 	# start ground pound
 	if !is_on_floor() and Input.is_action_just_pressed("ground_pound"):
 		state_machine.transition_to("Jump")
+		$TriggerPoundSound.play()
 		velocity.y = ground_pound_speed
 		is_ground_pounding = true
 	
@@ -72,11 +102,18 @@ func _physics_process(delta: float) -> void:
 	# check if the player just ground-pounded
 	if is_on_floor() and is_ground_pounding:
 		is_ground_pounding = false
-		ground_pounded.emit(current_intersection)
+		$PoundSound.play()
+		# using colliders to update the nearest intersection does not work every time
+		# sometimes, there is a delay in the update and the signal emits null
+		# to fix, we get the nearest intersection whenever the ground pound occurs
+		ground_pounded.emit(get_nearest_intersection())
+	elif is_on_floor() and !prev_on_floor:
+		$LandSound.play()
 	
 	# start jump
 	if is_on_floor() and Input.is_action_just_pressed("move_up"):
 		state_machine.transition_to("Jump")
+		$JumpSound.play()
 		velocity.y = -1 * jump_speed
 		spawn_dust()
 	

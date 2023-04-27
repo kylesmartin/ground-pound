@@ -23,4 +23,3 @@ emission_sphere_radius = 1.0
 spread = 20.0
 gravity = Vector2(0, 0)
 initial_velocity_max = 10.0
-color = Color(1, 0.815686, 0.501961, 1)
